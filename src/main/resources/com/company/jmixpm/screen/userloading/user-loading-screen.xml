@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://userLoadingScreen.caption">
+    <data>
+        <keyValueCollection id="usersLoadingDc">
+           <loader id="usersLoadingDl">
+               <query>
+                   <![CDATA[select e.assignee, sum(e.estimatedEfforts) from Task_ e
+                            where e.closed = false or e.closed IS NULL group by e.assignee]]>
+               </query>
+           </loader>
+            <properties>
+                <property name="assignee" class="com.company.jmixpm.entity.User"/>
+                <property name="estimatedEfforts" datatype="decimal"/>
+            </properties>
+        </keyValueCollection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout expand="usersLoadingTable">
+        <table id="usersLoadingTable"
+               dataContainer="usersLoadingDc"
+               width="100%">
+            <actions>
+                <action id="refresh" type="refresh"/>
+                <action id="loadingInfo" caption="Loading info" trackSelection="true"/>
+            </actions>
+            <buttonsPanel>
+                <button id="refreshBtn" action="usersLoadingTable.refresh"/>
+                <button id="loadingInfoBtn" action="usersLoadingTable.loadingInfo"/>
+            </buttonsPanel>
+            <columns>
+                <column id="assignee" caption="msg://assignee.caption"/>
+                <column id="estimatedEfforts" caption="msg://estimatedEfforts.caption"/>
+            </columns>
+        </table>
+    </layout>
+</window>

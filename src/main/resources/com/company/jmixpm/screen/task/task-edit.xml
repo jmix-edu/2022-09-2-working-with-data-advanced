@@ -38,6 +38,8 @@
                 </entityPicker>
                 <dateField id="startDateField" property="startDate"/>
                 <textField id="estimatedEffortsField" property="estimatedEfforts"/>
+                <comboBox id="labelField" property="label"/>
+                <checkBox id="closedField" property="closed"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
