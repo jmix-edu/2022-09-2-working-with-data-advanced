@@ -1,5 +1,6 @@
 package com.company.jmixpm.screen.projectstats;
 
+import com.company.jmixpm.app.ProjectStatsService;
 import com.company.jmixpm.entity.ProjectStats;
 import io.jmix.core.LoadContext;
 import io.jmix.core.Metadata;
@@ -15,13 +16,11 @@ public class ProjectStatsScreen extends Screen {
     @Autowired
     private Metadata metadata;
 
+    @Autowired
+    private ProjectStatsService projectStatsService;
+
     @Install(to = "statsDl", target = Target.DATA_LOADER)
     private List<ProjectStats> statsDlLoadDelegate(LoadContext<ProjectStats> loadContext) {
-        ProjectStats stats = metadata.create(ProjectStats.class);
-        stats.setProjectName("test project");
-        stats.setTaskCount(2);
-        stats.setActualEfforts(12);
-        stats.setPlannedEfforts(12);
-        return List.of(stats);
+        return projectStatsService.fetchProjectStatistics();
     }
 }
