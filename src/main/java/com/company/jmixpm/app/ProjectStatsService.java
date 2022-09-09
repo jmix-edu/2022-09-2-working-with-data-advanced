@@ -4,6 +4,9 @@ import com.company.jmixpm.entity.Project;
 import com.company.jmixpm.entity.ProjectStats;
 import com.company.jmixpm.entity.Task;
 import io.jmix.core.DataManager;
+import io.jmix.core.FetchPlan;
+import io.jmix.core.FetchPlanRepository;
+import io.jmix.core.FetchPlans;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +18,21 @@ public class ProjectStatsService {
 
     private DataManager dataManager;
 
-    public ProjectStatsService(DataManager dataManager) {
+    private FetchPlans fetchPlans;
+
+    private FetchPlanRepository fetchPlanRepository;
+
+    public ProjectStatsService(DataManager dataManager, FetchPlans fetchPlans,
+                               FetchPlanRepository fetchPlanRepository) {
         this.dataManager = dataManager;
+        this.fetchPlans = fetchPlans;
+        this.fetchPlanRepository = fetchPlanRepository;
     }
 
     public List<ProjectStats> fetchProjectStatistics() {
-        List<Project> projects = dataManager.load(Project.class).all().list();
+        List<Project> projects = dataManager.load(Project.class).all()
+                .fetchPlan("project-with-tasks")
+                .list();
         List<ProjectStats> projectStats = projects.stream()
                 .map(project -> {
                     ProjectStats stats = dataManager.create(ProjectStats.class);
@@ -29,10 +41,7 @@ public class ProjectStatsService {
                     List<Task> tasks = project.getTasks();
                     stats.setTaskCount(tasks.size());
 
-                    Integer estimatedEfforts = tasks.stream()
-                            .map(task-> task.getEstimatedEfforts() == null ? 0 : task.getEstimatedEfforts())
-                            .reduce(0, Integer::sum);
-                    stats.setPlannedEfforts(estimatedEfforts);
+                    stats.setPlannedEfforts(project.getTotalEstimateddEfforts());
                     stats.setActualEfforts(getActualEfforts(project.getId()));
                     return stats;
                 })
@@ -47,5 +56,16 @@ public class ProjectStatsService {
                 .one();
 
         return actualEfforts;
+    }
+
+    private FetchPlan createFetchPlanWithTasks() {
+        return fetchPlans.builder(Project.class)
+                .addFetchPlan(FetchPlan.INSTANCE_NAME)
+                .add("tasks", fetchPlanBuilder -> {
+                    fetchPlanBuilder.addFetchPlan(FetchPlan.INSTANCE_NAME).partial();
+                })
+                .add("totalEstimateddEfforts")
+                .partial()
+                .build();
     }
 }

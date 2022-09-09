@@ -3,11 +3,9 @@ package com.company.jmixpm.entity;
 import com.company.jmixpm.app.datatype.ProjectLabels;
 import com.company.jmixpm.app.validation.SizeProjectLabels;
 import com.company.jmixpm.app.validation.ValidDateProject;
-import io.jmix.core.DeletePolicy;
 import io.jmix.core.annotation.DeletedBy;
 import io.jmix.core.annotation.DeletedDate;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
-import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.metamodel.annotation.Composition;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
@@ -31,6 +29,9 @@ public class Project {
     @Column(name = "ID", nullable = false)
     @Id
     private UUID id;
+
+    @Column(name = "TOTAL_ESTIMATEDD_EFFORTS")
+    private Integer totalEstimateddEfforts;
 
     @SizeProjectLabels(min = 2, max = 5)
     @Column(name = "PROJECT_LABELS")
@@ -73,6 +74,14 @@ public class Project {
     @Column(name = "DELETED_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedDate;
+
+    public Integer getTotalEstimateddEfforts() {
+        return totalEstimateddEfforts;
+    }
+
+    public void setTotalEstimateddEfforts(Integer totalEstimateddEfforts) {
+        this.totalEstimateddEfforts = totalEstimateddEfforts;
+    }
 
     public Date getDeletedDate() {
         return deletedDate;

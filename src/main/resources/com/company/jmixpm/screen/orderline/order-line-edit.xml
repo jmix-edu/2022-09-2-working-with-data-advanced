@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://jmix.io/schema/ui/window"
-        caption="msg://taskEdit.caption"
+        caption="msg://orderLineEdit.caption"
         focusComponent="form">
     <data>
-        <instance id="taskDc"
-                  class="com.company.jmixpm.entity.Task">
+        <instance id="orderLineDc"
+                  class="com.company.jmixpm.entity.OrderLine">
             <fetchPlan extends="_base">
-                <property name="assignee" fetchPlan="_base"/>
+                <property name="order" fetchPlan="_base"/>
                 <property name="project" fetchPlan="_base"/>
             </fetchPlan>
             <loader/>
@@ -28,21 +28,22 @@
     <dialogMode height="600"
                 width="800"/>
     <layout spacing="true" expand="editActions">
-        <form id="form" dataContainer="taskDc">
+        <form id="form" dataContainer="orderLineDc">
             <column width="350px">
-                <textField id="nameField" property="name"/>
-                <entityPicker id="assigneeField" property="assignee">
+                <textField id="priceField" property="price"/>
+                <textField id="descriptionField" property="description"/>
+                <entityPicker id="orderField" property="order">
                     <actions>
                         <action id="entityLookup" type="entity_lookup"/>
                         <action id="entityClear" type="entity_clear"/>
                     </actions>
                 </entityPicker>
-                <dateField id="startDateField" property="startDate"/>
-                <textField id="estimatedEffortsField" property="estimatedEfforts">
-                </textField>
-                <comboBox id="labelField" property="label"/>
-                <checkBox id="closedField" property="closed"/>
-                <field id="projectLabelsField" property="project.projectLabels"/>
+                <entityPicker id="projectField" property="project">
+                    <actions>
+                        <action id="entityLookup" type="entity_lookup"/>
+                        <action id="entityClear" type="entity_clear"/>
+                    </actions>
+                </entityPicker>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

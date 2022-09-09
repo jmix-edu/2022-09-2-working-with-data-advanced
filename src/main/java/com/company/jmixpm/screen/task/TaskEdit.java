@@ -17,7 +17,7 @@ public class TaskEdit extends StandardEditor<Task> {
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
         Project project = getEditedEntity().getProject();
-        if (project != null) {
+        if (project != null && project.getProjectLabels() != null) {
             labelField.setOptionsList(project.getProjectLabels().getLabels());
         }
     }
