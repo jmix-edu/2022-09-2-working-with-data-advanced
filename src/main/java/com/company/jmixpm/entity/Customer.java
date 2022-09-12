@@ -11,9 +11,7 @@ import java.util.UUID;
 
 @JmixEntity
 @Store(name = "customers")
-@Table(name = "CUSTOMER", indexes = {
-        @Index(name = "IDX_CUSTOMER_ORDERS", columnList = "")
-})
+@Table(name = "CUSTOMER")
 @Entity
 public class Customer {
     @JmixGeneratedValue
@@ -33,6 +31,18 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
+
+    @Column(name = "VERSION", nullable = false)
+    @Version
+    private Integer version;
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;

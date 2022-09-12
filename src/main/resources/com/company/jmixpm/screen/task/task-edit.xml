@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:dynattr="http://jmix.io/schema/dynattr/ui"
         caption="msg://taskEdit.caption"
         focusComponent="form">
     <data>
@@ -9,10 +10,11 @@
                 <property name="assignee" fetchPlan="_base"/>
                 <property name="project" fetchPlan="_base"/>
             </fetchPlan>
-            <loader/>
+            <loader dynamicAttributes="true"/>
         </instance>
     </data>
     <facets>
+        <dynattr:dynamicAttributes/>
         <dataLoadCoordinator auto="true"/>
         <screenSettings id="settingsFacet" auto="true"/>
     </facets>
@@ -43,8 +45,13 @@
                 <comboBox id="labelField" property="label"/>
                 <checkBox id="closedField" property="closed"/>
                 <field id="projectLabelsField" property="project.projectLabels"/>
+                <textArea id="descriptionTextArea" property="+task-notes-description"/>
             </column>
         </form>
+        <dynattr:dynamicAttributesPanel id="dynamicAttributesPanel"
+
+                                        width="100%"
+                                        dataContainer="taskDc"/>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>

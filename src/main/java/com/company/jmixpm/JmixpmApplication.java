@@ -1,6 +1,8 @@
 package com.company.jmixpm;
 
 import com.google.common.base.Strings;
+import io.jmix.audit.EntityLog;
+import io.jmix.audit.impl.EntityLogImpl;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;

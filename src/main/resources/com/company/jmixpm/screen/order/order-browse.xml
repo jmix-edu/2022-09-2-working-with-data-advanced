@@ -15,6 +15,29 @@
                 </query>
             </loader>
         </collection>
+        <collection id="ordersLastMonthDc"
+                    class="com.company.jmixpm.entity.Order">
+            <fetchPlan extends="_base">
+                <property name="customer" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="ordersLastMonthDl">
+                <query>
+                    <![CDATA[select e from Order_ e where @between(e.date, now-1, now, month)]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="ordersLastWeekDc"
+                    class="com.company.jmixpm.entity.Order">
+            <fetchPlan extends="_base">
+                <property name="customer" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="ordersLastWeekDl">
+                <query>
+                    <![CDATA[select e from Order_ e where e.date >= FIRST_DAY_OF_CURRENT_WEEK
+                            and e.date <= LAST_DAY_OF_CURRENT_WEEK]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <facets>
         <dataLoadCoordinator auto="true"/>
@@ -32,32 +55,73 @@
     </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="ordersTable" spacing="true">
-        <filter id="filter"
-                dataLoader="ordersDl">
-            <properties include=".*"/>
-        </filter>
-        <groupTable id="ordersTable"
-                    width="100%"
-                    dataContainer="ordersDc">
-            <actions>
-                <action id="create" type="create"/>
-                <action id="edit" type="edit"/>
-                <action id="remove" type="remove"/>
-            </actions>
-            <columns>
-                <column id="orderNumber"/>
-                <column id="date"/>
-                <column id="customer"/>
-            </columns>
-            <simplePagination/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
-                <button id="createBtn" action="ordersTable.create"/>
-                <button id="editBtn" action="ordersTable.edit"/>
-                <button id="removeBtn" action="ordersTable.remove"/>
-            </buttonsPanel>
-        </groupTable>
+    <layout expand="tabSheet" spacing="true">
+        <tabSheet width="100%" id="tabSheet">
+            <tab id="genericFilterTab" spacing="true"
+                 caption="Generic filter"
+                 expand="ordersTable">
+                <filter id="filter"
+                        dataLoader="ordersDl">
+                    <properties include=".*"/>
+                </filter>
+                <groupTable id="ordersTable"
+                            width="100%"
+                            dataContainer="ordersDc">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="orderNumber"/>
+                        <column id="date"/>
+                        <column id="customer"/>
+                    </columns>
+                    <simplePagination/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtn" action="ordersTable.create"/>
+                        <button id="editBtn" action="ordersTable.edit"/>
+                        <button id="removeBtn" action="ordersTable.remove"/>
+                    </buttonsPanel>
+                </groupTable>
+            </tab>
+            <tab id="lastMonthTab" expand="ordersLastMonthTable" caption="Last month orders" spacing="true">
+                <label value="Last month orders" stylename="h2"/>
+                <table id="ordersLastMonthTable"
+                       dataContainer="ordersLastMonthDc"
+                       width="100%">
+                    <actions>
+                        <action id="refresh" type="refresh"/>
+                    </actions>
+                    <buttonsPanel>
+                        <button id="refreshBtn" action="ordersLastMonthTable.refresh"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="orderNumber"/>
+                        <column id="date"/>
+                        <column id="customer"/>
+                    </columns>
+                </table>
+            </tab>
+            <tab id="lastWeekTab" expand="lastWeekTable">
+                <table id="lastWeekTable"
+                       dataContainer="ordersLastWeekDc"
+                       width="100%">
+                    <actions>
+                        <action id="refresh" type="refresh"/>
+                    </actions>
+                    <buttonsPanel>
+                        <button id="refreshBtn1" action="lastWeekTable.refresh"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="orderNumber"/>
+                        <column id="date"/>
+                        <column id="customer"/>
+                    </columns>
+                </table>
+            </tab>
+        </tabSheet>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>
